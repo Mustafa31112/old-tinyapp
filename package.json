@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Mustafa31112/tinyapp/issues"
   },
-  "homepage": "https://github.com/Mustafa31112/tinyapp#readme"
+  "homepage": "https://github.com/Mustafa31112/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
