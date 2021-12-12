@@ -10,6 +10,7 @@
   <%- include('partials/_header') %>
   <div class="card text-center">
       <div class="card-header"></div>
+      <% if (user) { %>
       <div class="card-body">
         <h5 class="card-title">TinyURL for: <%= longURL %></h5>
         <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
@@ -19,6 +20,9 @@
         <input id='newLongURL' type="text" value="<%= longURL %>" name='newLongURL' placeholder="http://www....">
         <input class="btn btn-primary" type="submit" value="Submit">
       </form> 
+      <% } else { %>
+        <p class="alert alert-danger"> You must be logged in to view url</p>
+     <% } %>
     <div class="card-footer text-muted"></div>
   </div>
   <!-- Bootstrap JS -->

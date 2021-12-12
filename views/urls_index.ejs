@@ -22,20 +22,25 @@
         </tr>
       </thead>
       <tbody>
-        <% for(let url in urls) { %>
-          <tr>
-            <td><%= url %></td>
-            <td><%= urls[url] %></td>
-            <form method="GET" action="/urls/<%= url %>/">
-            <td><button type="submit" class="btn btn-outline-primary" >Edit</button></td>
-          </form>
-            <td>
-              <form method="POST" action="/urls/<%= url %>/delete">
-                <button type="submit" class="btn btn-outline-danger">Delete</button>
-              </form>
-            </td>
-          </tr>
+        <% if (user) { %>
+          <% for(let url in urls) { %>
+            <tr>
+              <td><%= url %></td>
+              <td><%= urls[url].longURL %></td>
+              <form method="GET" action="/urls/<%= url %>/">
+              <td><button type="submit" class="btn btn-outline-primary" >Edit</button></td>
+            </form>
+              <td>
+                <form method="POST" action="/urls/<%= url %>/delete">
+                  <button type="submit" class="btn btn-outline-danger">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% } %>
+        <% } else { %>
+           <p class="alert alert-danger"> You must be logged in to view urls</p>
         <% } %>
+        
       </tbody>
     </table>
   </main>
