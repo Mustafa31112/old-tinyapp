@@ -6,6 +6,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
+const bcrypt = require('bcryptjs');
+
 const users = {
   userRandomID: {
     id: "userRandomID",
@@ -185,12 +187,13 @@ app.post("/login", (req, res) => {
     return res.status(403).send("User not found");
   }
 
-  if (password !== user.password) {
+  if (!bcrypt.compareSync(password, user.password)) {
     return res.status(403).send("Pass is wrong");
   }
 
   res.cookie("user_id", user.id);
   res.redirect("/urls");
+
 });
 
 app.post("/logout", (req, res) => {
@@ -230,13 +233,18 @@ app.post("/register", (req, res) => {
   if (findUser) {
     return res.status(400).send("this user already exists");
   }
+
   const id = generateRandomString();
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  console.log(hashedPassword)
   const user = {
     id,
     email,
-    password,
+    password: hashedPassword,
   };
+
   users[id] = user;
+
   res.cookie("user_id", id);
   res.redirect("/urls");
 });
