@@ -6,11 +6,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 const bcrypt = require("bcryptjs");
 const { getUserByEmail, generateRandomString, urlsForUser } = require("./helpers");
-// const { generateRandomString } = require("./helpers");
-
-// const cookieParser = require("cookie-parser");
-// app.use(cookieParser());
-
 const cookieSession = require("cookie-session");
 app.use(
   cookieSession({
@@ -19,12 +14,6 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
   })
 );
-
-// app.use(function (req, res, next) {
-//   req.sessionOptions.maxAge = req.session.maxAge || req.sessionOptions.maxAge
-//   next()
-// })
-
 const users = {
   userRandomID: {
     id: "userRandomID",
@@ -38,7 +27,7 @@ const users = {
   },
 };
 
-let urlDatabase = {
+const urlDatabase = {
   // b2xVn2: "http://www.lighthouselabs.ca",
   // "9sm5xK": "http://www.google.com",
   b6UTxQ: {
@@ -81,24 +70,17 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+
+
 
 app.get("/urls", (req, res) => {
   const user_id = req.session.user_id;
-  // const { user_id } = req["cookies"];
+  
   const user = users[user_id];
-  // if (!user_id) {
-
-  //   res.redirect("/login");
-  // }
+  
   const userUrls = urlsForUser(user_id, urlDatabase);
-  // const templateVars = { urls: urlDatabase };
+  
   const templateVars = {
     user: user,
     urls: userUrls,
@@ -115,9 +97,9 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   const user_id = req.session.user_id;
-  // const { user_id } = req["cookies"];
+  
   const user = users[user_id];
-  // console.log(user_id);
+  
   if (user_id) {
     const templateVars = {
       user: user,
@@ -126,7 +108,7 @@ app.get("/urls/new", (req, res) => {
     return;
   }
   res.redirect("/login");
-  // const templateVars = { urls: urlDatabase };
+  
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -135,15 +117,15 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const user_id = req.session.user_id;
-  // const { user_id } = req["cookies"];
+ 
   const user = users[user_id];
 
-  // const templateVars = { urls: urlDatabase };
+  
   const templateVars = {
     user: user,
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
-    // ... any other vars
+    
   };
   // const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render("urls_show", templateVars);
