@@ -123,9 +123,11 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const user_id = req.session.user_id;
- 
   const user = users[user_id];
-
+  const shortURL = req.params.shortURL
+if (user_id !== urlDatabase[shortURL].userID) {
+  return res.send('you dont own this url')
+}
   
   const templateVars = {
     user: user,
@@ -148,7 +150,7 @@ app.post("/urls", (req, res) => {
   const longURL = req.body.longURL;
 
   const userID = req.session.user_id;
-  urlDatabase = { ...urlDatabase, [shortURL]: { longURL, userID } };
+  urlDatabase[shortURL] =  { longURL, userID } ;
   res.redirect(`/urls/`);
   // console.log(req.body);  // Log the POST request body to the console
   // res.send("Ok");         // Respond with 'Ok' (we will replace this)
